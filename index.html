@@ -4,39 +4,27 @@
 <meta charset="UTF-8">
 <title>If Only… Bharat</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div id="overlay"></div>
-
-<div id="sideMenu">
-  <h3>Menu</h3>
-  <div class="menuItem" data-screen="life">🏠 Life</div>
-  <div class="menuItem" data-screen="army">🪖 Army</div>
-  <div class="menuItem" data-screen="relations">👨‍👩‍👦 Relations</div>
-  <div class="menuItem" data-screen="politics">🏛 Politics</div>
-  <div class="menuItem" data-screen="events">📰 Events</div>
-  <div class="menuItem" data-screen="god">🛠 God Mode</div>
-</div>
 
 <div id="topBar">
   <span id="menuBtn">☰</span>
   <span>If Only… Bharat</span>
-  <span id="yearText"></span>
+  <span id="year"></span>
+</div>
+
+<div id="sideMenu" class="hidden">
+  <button onclick="go('life')">🏠 Life</button>
+  <button onclick="go('bank')">🏦 Bank</button>
+  <button onclick="go('army')">🪖 Army</button>
+  <button onclick="go('relations')">👥 Relations</button>
+  <button onclick="go('events')">📰 Events</button>
+  <button onclick="go('god')">🛠 God Mode</button>
 </div>
 
 <div id="main"></div>
 
-<div id="bottomNav">
-  <div class="navItem active" data-screen="life">🏠 Life</div>
-  <div class="navItem" data-screen="army">🪖 Army</div>
-  <div class="navItem" data-screen="relations">👥 Relations</div>
-  <div class="navItem" data-screen="politics">🏛 Politics</div>
-</div>
-
-<script src="js/events.js"></script>
-<script src="js/godmode.js"></script>
-<script src="js/game.js"></script>
+<script src="game.js"></script>
 </body>
 </html>
