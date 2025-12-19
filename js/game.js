@@ -43,7 +43,7 @@ window.go = function(screen){
 
   if(screen==="bank"){
     main.innerHTML = game.bank
-      ? `<div class="card">🏦 வங்கி லாபம்: ₹50,000 / ஆண்டு</div>`
+      ? `<div class="card">🏦 வங்கி லாபம்: ₹50,00000000 / ஆண்டு</div>`
       : `<button onclick="buyBank()">🏦 வங்கி வாங்க (₹1,00,000)</button>`;
   }
 
@@ -171,3 +171,4 @@ save();
 go("life");
 
 });
+
