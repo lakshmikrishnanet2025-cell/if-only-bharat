@@ -1,105 +1,131 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 const main = document.getElementById("main");
-const yearText = document.getElementById("yearText");
+const yearEl = document.getElementById("year");
+const menu = document.getElementById("sideMenu");
 
-window.game = JSON.parse(localStorage.getItem("bharatGame")) || {
+document.getElementById("menuBtn").onclick = () =>
+  menu.classList.toggle("hidden");
+
+window.game = JSON.parse(localStorage.getItem("bharat")) || {
   age: 25,
-  year: 2015,
+  year: 2018,
   cash: 50000,
   influence: 20,
   popularity: 40,
   morality: 60,
   army: 100,
-  avatar: "citizen",
-  relations: {
-    family: 60,
-    public: 40,
-    media: 30,
-    party: 20
-  }
+  bank: false,
+  relations: { family:60, public:40, media:30 }
 };
 
-function save() {
-  localStorage.setItem("bharatGame", JSON.stringify(game));
-  yearText.textContent = game.year;
+function save(){
+  localStorage.setItem("bharat", JSON.stringify(game));
+  yearEl.textContent = game.year;
 }
 
-window.loadScreen = function(screen) {
-  if (screen === "life") {
+window.go = function(screen){
+  menu.classList.add("hidden");
+
+  if(screen==="life"){
     main.innerHTML = `
       <div class="card">
-        <h3>Status</h3>
-        Age: ${game.age}<br>
-        Money: ₹${game.cash}<br>
-        Influence: ${game.influence}<br>
-        Popularity: ${game.popularity}<br>
-        Morality: ${game.morality}
+        Age ${game.age}<br>
+        ₹${game.cash}<br>
+        Influence ${game.influence}<br>
+        Popularity ${game.popularity}
       </div>
-      <button class="btn" onclick="ageUp()">▶ Age Up</button>
+      <button onclick="ageUp()">▶ Age Up</button>
     `;
   }
 
-  if (screen === "army") {
+  if(screen==="bank"){
+    main.innerHTML = game.bank
+      ? `<div class="card">Bank Profit ₹50,000 / year</div>`
+      : `<button onclick="buyBank()">Buy Bank (₹1,00,000)</button>`;
+  }
+
+  if(screen==="army"){
     main.innerHTML = `
-      <div class="card">
-        Soldiers: ${game.army}
-        <button class="btn" onclick="recruit()">Recruit 100 (₹50k)</button>
-      </div>
+      <div class="card">Army: ${game.army}</div>
+      <button onclick="recruit()">Recruit 100 (₹20k)</button>
     `;
   }
 
-  if (screen === "relations") {
+  if(screen==="relations"){
     main.innerHTML = `
       <div class="card">
-        Family: ${game.relations.family}<br>
-        Public: ${game.relations.public}<br>
-        Media: ${game.relations.media}<br>
-        Party: ${game.relations.party}
-      </div>
-    `;
-  }
-
-  if (screen === "politics") {
-    main.innerHTML = `
-      <div class="card">
-        <h3>Politics</h3>
-        Influence: ${game.influence}
-        <button class="btn" onclick="game.influence+=10;save();loadScreen('politics')">
-          Campaign
-        </button>
+        Family ${game.relations.family}<br>
+        Public ${game.relations.public}<br>
+        Media ${game.relations.media}
       </div>
     `;
   }
 
-  if (screen === "events") {
-    triggerEvent();
+  if(screen==="events"){
+    main.innerHTML = `
+      <div class="card">
+        🌧 Floods in Cuddalore
+        <button onclick="eventChoice(1)">Send Help</button>
+        <button onclick="eventChoice(0)">Ignore</button>
+      </div>
+    `;
+  }
+
+  if(screen==="god"){
+    main.innerHTML = `
+      <input id="p" placeholder="password">
+      <button onclick="god()">Login</button>
+    `;
   }
 };
 
-window.ageUp = function() {
+window.ageUp = function(){
   game.age++;
   game.year++;
-  game.cash += 30000;
-  triggerEvent();
-  save();
-  loadScreen("life");
+  if(game.bank) game.cash += 50000;
+  save(); go("life");
 };
 
-window.recruit = function() {
-  if (game.cash >= 50000) {
-    game.cash -= 50000;
-    game.army += 100;
-    save();
-    loadScreen("army");
+window.buyBank = function(){
+  if(game.cash>=100000){
+    game.cash-=100000;
+    game.bank=true;
+    save(); go("bank");
+  } else alert("Not enough money");
+};
+
+window.recruit = function(){
+  if(game.cash>=20000){
+    game.cash-=20000;
+    game.army+=100;
+    save(); go("army");
   }
 };
 
-document.querySelectorAll("[data-screen]").forEach(btn => {
-  btn.onclick = () => loadScreen(btn.dataset.screen);
-});
+window.eventChoice = function(ok){
+  if(ok){ game.popularity+=10; game.cash-=20000; }
+  else game.popularity-=10;
+  save(); go("life");
+};
+
+window.god = function(){
+  if(p.value==="god123"){
+    main.innerHTML=`
+      Age <input id="ga" value="${game.age}">
+      Cash <input id="gc" value="${game.cash}">
+      <button onclick="applyGod()">Apply</button>
+    `;
+  } else alert("Wrong password");
+};
+
+window.applyGod = function(){
+  game.age=+ga.value;
+  game.cash=+gc.value;
+  save(); go("life");
+};
 
 save();
-loadScreen("life");
+go("life");
 
 });
